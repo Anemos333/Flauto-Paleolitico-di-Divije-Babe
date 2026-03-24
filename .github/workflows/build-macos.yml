@@ -27,7 +27,7 @@ jobs:
       - name: Build plugin
         run: |
           xcodebuild \
-            -project project.pbxproj \
+            -project/Flauto paleolitico di1 Divije Babe.xcodeproj/project.pbxproj \
             -configuration Release \
             -scheme "MyPlugin - All" \
             BUILD_DIR=build
