@@ -21,6 +21,9 @@ jobs:
           brew update
           brew install cmake
 
+      
+      - name: Show files
+        run: ls -R
       - name: Build plugin
         run: |
           xcodebuild \
