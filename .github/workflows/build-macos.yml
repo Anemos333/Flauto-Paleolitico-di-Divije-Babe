@@ -24,7 +24,7 @@ jobs:
       - name: Build plugin
         run: |
           xcodebuild \
-            -project Builds/MacOSX/project.pbxproj \
+            -project project.pbxproj \
             -configuration Release \
             -scheme "MyPlugin - All" \
             BUILD_DIR=build
