@@ -1,0 +1,36 @@
+name: Build macOS VST3 (JUCE Projucer)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Xcode
+        run: sudo xcode-select -switch /Applications/Xcode.app
+
+      - name: Install dependencies
+        run: |
+          brew update
+          brew install cmake
+
+      - name: Build plugin
+        run: |
+          xcodebuild \
+            -project Builds/MacOSX/MyPlugin.xcodeproj \
+            -configuration Release \
+            -scheme "MyPlugin - All" \
+            BUILD_DIR=build
+
+      - name: Upload VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: vst3-macos
+          path: build/Release/*.vst3
