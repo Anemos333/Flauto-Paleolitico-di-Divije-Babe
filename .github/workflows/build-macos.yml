@@ -24,13 +24,13 @@ jobs:
 
       - name: List schemes
         run: |
-          xcodebuild -list -project "Flauto paleolitico di Divije Babe.xcodeproj"
+          xcodebuild -list -project "Flauto paleolitico di1 Divije Babe.xcodeproj"
 
       - name: Build plugin
         run: |
           xcodebuild \
-            -project "Flauto paleolitico di Divije Babe.xcodeproj" \
-            -scheme "Flauto paleolitico di Divije Babe - All" \
+            -project "Flauto paleolitico di1 Divije Babe.xcodeproj" \
+            -scheme "Flauto paleolitico di1 Divije Babe - All" \
             -configuration Release \
             BUILD_DIR=build \
             build
