@@ -17,23 +17,26 @@ jobs:
         run: sudo xcode-select -switch /Applications/Xcode.app
 
       - name: Install dependencies
-        run: |
-          brew update
-          brew install cmake
+        run: brew install cmake
 
-      
       - name: Show files
         run: ls -R
+
+      - name: List Xcode schemes
+        run: |
+          xcodebuild -list -project "Flauto paleolitico di1 Divije Babe.xcodeproj"
+
       - name: Build plugin
         run: |
           xcodebuild \
-            -project/Flauto-paleolitico-di1-Divije-Babe.xcodeproj/project.pbxproj \
+            -project "Flauto paleolitico di1 Divije Babe.xcodeproj" \
+            -scheme "Flauto paleolitico di1 Divije Babe - All" \
             -configuration Release \
-            -scheme "MyPlugin - All" \
-            BUILD_DIR=build
+            BUILD_DIR=build \
+            build
 
       - name: Upload VST3
         uses: actions/upload-artifact@v4
         with:
           name: vst3-macos
-          path: build/Release/*.vst3
+          path: build/Release/**/*.vst3
