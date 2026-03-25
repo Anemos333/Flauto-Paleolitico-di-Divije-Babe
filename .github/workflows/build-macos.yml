@@ -1,40 +1,40 @@
-
 name: Build macOS VST3 (JUCE Projucer)
+
 on:
-push:
-  branches: [ main ]
-pull_request:
+  push:
+    branches: [ main ]
+  pull_request:
 
 jobs:
-build-macos:
-  runs-on: macos-14
+  build-macos:
+    runs-on: macos-14
 
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup Xcode
-      run: sudo xcode-select -switch /Applications/Xcode.app
+      - name: Setup Xcode
+        run: sudo xcode-select -switch /Applications/Xcode.app
 
-    - name: Install dependencies
-      run: |
-        brew update
-        brew install cmake
+      - name: Install dependencies
+        run: |
+          brew update
+          brew install cmake
 
-    
-    - name: Show files
-      run: ls -R
-    - name: Build plugin
-      run: |
+      - name: Show files
+        run: ls -R
+
+      - name: Build plugin
+        run: |
           xcodebuild \
             -project "Flauto paleolitico di1 Divije Babe.xcodeproj" \
             -scheme "Flauto paleolitico di1 Divije Babe - All" \
             -configuration Release \
             BUILD_DIR=build \
             build
-  
-     - name: Upload VST3
-       uses: actions/upload-artifact@v4
-       with:
+
+      - name: Upload VST3
+        uses: actions/upload-artifact@v4
+        with:
           name: vst3-macos
-          path: build/Release/*.vst3
+          path: build/Release/**/*.vst3
