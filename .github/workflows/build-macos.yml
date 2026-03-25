@@ -1,4 +1,4 @@
-name: Build macOS VST3 (JUCE Projucer)
+name: Build macOS VST3
 
 on:
   push:
@@ -13,28 +13,49 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Xcode
+      - name: Select Xcode
         run: sudo xcode-select -switch /Applications/Xcode.app
 
-      - name: Install dependencies
-        run: |
-          brew update
-          brew install cmake
+      - name: Show Xcode version
+        run: xcodebuild -version
 
-      - name: Show files
+      - name: Install dependencies
+        run: brew install cmake
+
+      - name: Show repository files
         run: ls -R
 
-      - name: Build plugin
+      - name: Verify Xcode projects
+        run: |
+          echo "=== Xcode projects found ==="
+          find . -maxdepth 2 -name "*.xcodeproj" -print
+
+      - name: Inspect project file
+        run: |
+          echo "=== First 30 lines of pbxproj ==="
+          head -30 "Flauto paleolitico di Divije Babe.xcodeproj/project.pbxproj"
+
+      - name: List schemes
+        run: |
+          xcodebuild -list -project "Flauto paleolitico di Divije Babe.xcodeproj"
+
+      - name: Build VST3
         run: |
           xcodebuild \
             -project "Flauto paleolitico di Divije Babe.xcodeproj" \
             -scheme "Flauto paleolitico di Divije Babe - All" \
             -configuration Release \
-            BUILD_DIR=build \
+            BUILD_DIR="$GITHUB_WORKSPACE/build" \
             build
 
-      - name: Upload VST3
+      - name: Show build outputs
+        run: |
+          echo "=== Build products ==="
+          find "$GITHUB_WORKSPACE/build" -name "*.vst3" -print || true
+
+      - name: Upload VST3 artifact
         uses: actions/upload-artifact@v4
         with:
           name: vst3-macos
-          path: build/Release/**/*.vst3
+          path: build/**/*.vst3
+          if-no-files-found: error
