@@ -27,7 +27,7 @@ jobs:
       - name: Build plugin
         run: |
           xcodebuild \
-            -project "Flauto paleolitico di1 Divije Babe.xcodeproj" \
+            -project "Flauto paleolitico di Divije Babe.xcodeproj" \
             -scheme "Flauto paleolitico di Divije Babe - All" \
             -configuration Release \
             BUILD_DIR=build \
