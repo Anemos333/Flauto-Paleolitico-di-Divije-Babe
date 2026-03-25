@@ -22,36 +22,28 @@ jobs:
       - name: Install dependencies
         run: brew install cmake
 
-      - name: Show repository files
-        run: ls -R
-
-      - name: Verify Xcode projects
-        run: |
-          echo "=== Xcode projects found ==="
-          find . -maxdepth 2 -name "*.xcodeproj" -print
-
-      - name: Inspect project file
-        run: |
-          echo "=== First 30 lines of pbxproj ==="
-          head -30 "Flauto paleolitico di Divije Babe.xcodeproj/project.pbxproj"
-
       - name: List schemes
         run: |
           xcodebuild -list -project "Flauto paleolitico di Divije Babe.xcodeproj"
 
-      - name: Build VST3
+      - name: Build VST3 only
         run: |
+          set -o pipefail
           xcodebuild \
             -project "Flauto paleolitico di Divije Babe.xcodeproj" \
-            -scheme "Flauto paleolitico di Divije Babe - All" \
+            -scheme "Flauto paleolitico di Divije Babe - VST3" \
             -configuration Release \
-            BUILD_DIR="$GITHUB_WORKSPACE/build" \
-            build
+            SYMROOT="$GITHUB_WORKSPACE/build" \
+            CODE_SIGNING_ALLOWED=NO \
+            build | tee xcodebuild.log
 
-      - name: Show build outputs
+      - name: Show errors only
+        if: failure()
         run: |
-          echo "=== Build products ==="
-          find "$GITHUB_WORKSPACE/build" -name "*.vst3" -print || true
+          echo "=== ERRORS ==="
+          grep -n "error:" xcodebuild.log || true
+          echo "=== LAST 120 LINES ==="
+          tail -120 xcodebuild.log || true
 
       - name: Upload VST3 artifact
         uses: actions/upload-artifact@v4
