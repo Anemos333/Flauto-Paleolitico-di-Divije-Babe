@@ -7,30 +7,30 @@ on:
 
 jobs:
   build-macos:
-    runs-on: macos-latest
+    runs-on: macos-14
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Xcode
+      - name: Select Xcode
         run: sudo xcode-select -switch /Applications/Xcode.app
 
-      - name: Install dependencies
-        run: brew install cmake
+      - name: Show Xcode version
+        run: xcodebuild -version
 
-      - name: Show files
+      - name: Show repo files
         run: ls -R
 
-      - name: List Xcode schemes
+      - name: List schemes
         run: |
-          xcodebuild -list -project "Flauto paleolitico di1 Divije Babe.xcodeproj"
+          xcodebuild -list -project "Flauto paleolitico di Divije Babe.xcodeproj"
 
       - name: Build plugin
         run: |
           xcodebuild \
-            -project "Flauto paleolitico di1 Divije Babe.xcodeproj" \
-            -scheme "Flauto paleolitico di1 Divije Babe - All" \
+            -project "Flauto paleolitico di Divije Babe.xcodeproj" \
+            -scheme "Flauto paleolitico di Divije Babe - All" \
             -configuration Release \
             BUILD_DIR=build \
             build
@@ -39,4 +39,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vst3-macos
-          path: build/Release/**/*.vst3
+          path: build/**/*.vst3
